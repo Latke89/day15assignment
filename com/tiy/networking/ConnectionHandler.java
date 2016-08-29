@@ -31,20 +31,34 @@ public class ConnectionHandler implements Runnable {
 			BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(inputSocket.getInputStream()));
 			PrintWriter outputToClient = new PrintWriter(inputSocket.getOutputStream(), true);
 
+			ClientMessageStorage myClientStorage = new ClientMessageStorage();
 			String firstInput;
 			String clientName;
 			firstInput = inputFromClient.readLine();
 			String[] nameArray = firstInput.split("=");
 			clientName = nameArray[1];
 			outputToClient.println("Thank you, " + clientName);
+			myClientStorage.setUserName(clientName);
 
 
 			String inputLine;
+			String historyString = null;
 			while ((inputLine = inputFromClient.readLine()) != null) {
-				System.out.println(clientName + " says: " + inputLine);
-//				System.out.println("Received message: " + inputLine + " from " + inputSocket.toString());
-
-				outputToClient.println("Message received loud and clear");
+				if (inputLine.equalsIgnoreCase("history"))  {
+//					outputToClient.println("You have " + myClientStorage.userMessages.size() + " messages. Would you like to receive them? y/n");
+//					if(inputLine.equalsIgnoreCase("y")) {
+//						while(true) {
+							for (String myHistory : myClientStorage.userMessages) {
+								outputToClient.println(myHistory);
+							}
+//							outputToClient.println("bye");
+//						}
+//					}
+				} else {
+					System.out.println(clientName + " says: " + inputLine);
+					outputToClient.println("Message sent");
+					myClientStorage.userMessages.add(inputLine);
+				}
 			}
 			}catch (IOException exception){
 				exception.printStackTrace();

@@ -32,11 +32,24 @@ public class AssignmentClient {
 					messageCount++;
 				} else {
 					System.out.println("What would you like to send?");
+					System.out.println("Type \"history\" for message history");
 					String message = inputScanner.nextLine();
 					// send the server an arbitrary message
 					outputToServer.println(message);
 					// read what the server returns
 					String serverResponse = inputFromServer.readLine();
+					System.out.println(serverResponse);
+					if (serverResponse.startsWith("You")) {
+//						while(true) {
+							String historyResponse = inputScanner.nextLine();
+							outputToServer.println(historyResponse);
+							String historyFromServer = inputFromServer.readLine();
+							System.out.println(historyFromServer);
+//							if(historyFromServer == "bye"){
+//								break;
+//							}
+						}
+//					}
 					System.out.println("Would you like to send another message? y/n");
 					String userChoice = inputScanner.nextLine();
 					if (userChoice.equalsIgnoreCase("n")) {
